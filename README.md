@@ -17,4 +17,8 @@ Checkout out our [website](http://empower.create-net.org/) and our [wiki](https:
 
 This repository includes the reference controller implementation and the associated SDK.
 
+### Changes
+This fork adds the WTP/controller discovery feature via UDP broadcasts: The agent sends a broadcast packet to the local network and the controller replies to notify the agent about its presence.
+It also returns the EmPOWER hello packets sent by the agent in order to implement a bidirectional heartbeat and therefore extend the error management.
+
 Code is released under the Apache License, Version 2.0.
