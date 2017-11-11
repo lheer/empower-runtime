@@ -54,6 +54,7 @@ from empower.lvapp import PT_CAPS_REQUEST
 from empower.lvapp import PT_LVAP_STATUS_REQ
 from empower.lvapp import PT_VAP_STATUS_REQ
 from empower.lvapp import PT_PORT_STATUS_REQ
+from empower.lvapp import HELLO
 from empower.core.lvap import LVAP
 from empower.core.networkport import NetworkPort
 from empower.core.vap import VAP
@@ -265,6 +266,11 @@ class LVAPPConnection:
         wtp.period = hello.period
         wtp.last_seen = hello.seq
         wtp.last_seen_ts = time.time()
+        
+        # Return the hello so the WTP knows we are alive
+        LOG.info("Returning hello packet to {}".format(wtp.addr))
+        ret = HELLO.build(hello)
+        self.stream.write(ret)
 
     def send_vaps(self):
         """Send VAPs configurations.

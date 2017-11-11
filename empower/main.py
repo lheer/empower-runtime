@@ -29,6 +29,7 @@ from uuid import UUID
 from ipaddress import ip_address
 
 from empower.core.core import EmpowerRuntime
+from empower.broadcastclient.broadcastclient import BroadcastClient
 
 RUNTIME = None
 
@@ -308,8 +309,17 @@ def main(argv=None):
     else:
         raise RuntimeError()
 
-    # start tornado loop
-    tornado.ioloop.IOLoop.instance().start()
+    #launch broadcast client
+    bcclient = BroadcastClient(addr="192.168.0.255")
+    bcclient.start()
+
+    try:
+        # start tornado loop
+        tornado.ioloop.IOLoop.instance().start()
+    except KeyboardInterrupt:
+        tornado.ioloop.IOLoop.instance().stop()
+        bcclient.stop()
+
 
 if __name__ == "__main__":
     main()
