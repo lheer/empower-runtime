@@ -1,6 +1,7 @@
 import socket
 import threading
 from time import sleep
+from struct import Struct
 
 
 class BroadcastClient(object):
@@ -19,8 +20,13 @@ class BroadcastClient(object):
     def run(self):
         while (self._running):
             data, addr = self._socket.recvfrom(64)
-            print("Got broadcast message {} from {}".format(data, addr))
-            # TODO: Check broadcast message content (i.e. "ping")
+            pkg = Struct("b17s").unpack(data)
+            print("Got broadcast message {} from {}".format(pkg, addr))
+            
+            if pkg[0] != 5:
+                print("Invalid broadcast packet!")
+                continue
+            
             self._socket.sendto(b"hello", (addr[0], 4434))
             print("Sent broadcast answer")
 
